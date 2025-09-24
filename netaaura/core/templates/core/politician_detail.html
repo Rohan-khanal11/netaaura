@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="politician-detail">
+
+    <div class="politician-header">
+        <h1>{{ politician.name }} <span>({{ politician.party }})</span></h1>
+        <img src="{{ politician.image.url }}" alt="{{ politician.name }}">
+    </div>
+
+    <div class="politician-info">
+        <p><strong>Position:</strong> {{ politician.position }}</p>
+        <p><strong>Biography:</strong> {{ politician.biography }}</p>
+        <p><strong>Average Aura:</strong> {{ politician.average_aura|floatformat:1 }}</p>
+    </div>
+
+    <hr>
+
+    <div class="rating-section">
+        <h2>Submit Rating</h2>
+        <form method="post" action="{% url 'rate_politician' politician.pk %}">
+            {% csrf_token %}
+            {{ rating_form.as_p }}
+            <button type="submit" class="btn-submit">Submit Rating</button>
+        </form>
+        {% if user.is_staff %}
+    <a href="{% url 'delete_politician' politician.pk %}" class="btn btn-danger">
+        Delete Politician
+    </a>
+{% endif %}
+
+    </div>
+
+    <hr>
+
+    <div class="comment-section">
+        <h2>Comments</h2>
+
+        <form method="post" action="">
+            {% csrf_token %}
+    {{ comment_form.as_p }}
+            <button type="submit" name="comment_submit" class="btn-submit">Add Comment</button>
+        </form>
+
+        <ul class="comments-list">
+            {% for comment in comments %}
+             <p><strong>{{ comment.user.username }}</strong>: {{ comment.text }}</p>
+                <small>{{ comment.created_at }}</small>
+                {% empty %}
+             <p>No comments yet.</p>
+    {% endfor %}
+
+        </ul>
+    </div>
+
+</div>
+{% endblock %}

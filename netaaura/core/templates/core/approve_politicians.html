@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% block content %}
+<div class="page-header">
+    <h1>Approve Politicians</h1>
+</div>
+
+<div class="cards-container">
+    {% if politicians %}
+        {% for politician in politicians %}
+            <div class="card">
+                <div class="card-image">
+                    {% if politician.photo %}
+                        <img src="{{ politician.photo.url }}" alt="{{ politician.name }}">
+                    {% else %}
+                        <img src="{% static 'images/default_avatar.png' %}" alt="No Image">
+                    {% endif %}
+                </div>
+                <div class="card-content">
+                    <h2>{{ politician.name }}</h2>
+                    <p><strong>Your Aura:</strong> {{ politician.aura_given|default:"Not Rated" }}</p>
+                    <p><strong>Average Aura:</strong> {{ politician.average_aura|default:"N/A" }}</p>
+                </div>
+                <div class="card-actions">
+                    <a href="{% url 'approve_politician' politician.id %}" class="btn-approve">Approve</a>
+                </div>
+                {% if user.is_staff %}
+                <a href="{% url 'delete_politician' politician.pk %}" class="btn btn-danger">
+                    Delete Politician
+                 </a>
+{% endif %}
+
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No politicians available for approval.</p>
+    {% endif %}
+</div>
+{% endblock %}

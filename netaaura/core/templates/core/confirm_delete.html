@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<h2>Delete Politician</h2>
+<p>Are you sure you want to delete <strong>{{ politician.name }}</strong>?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, delete</button>
+    <a href="{% url 'politician_detail' politician.pk %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

@@ -1,0 +1,309 @@
+/* =========================
+   CSS Variables
+========================= */
+:root {
+    --primary-color: #333;
+    --secondary-color: #444;
+    --accent-color: #28a745;
+    --bg-color: #f5f5f5;
+    --text-color: #222;
+    --text-muted: #555;
+    --card-shadow: rgba(0,0,0,0.1);
+    --card-shadow-hover: rgba(0,0,0,0.2);
+}
+
+/* =========================
+   Reset & Global Styles
+========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 20px;
+}
+
+/* =========================
+   Header & Navbar
+========================= */
+header {
+    background-color: var(--primary-color);
+    padding: 15px 30px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo a {
+    color: #fff;
+    font-size: 1.6rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li a {
+    color: #eee;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.nav-links li a:hover {
+    background-color: var(--secondary-color);
+}
+
+/* =========================
+   Buttons
+========================= */
+.btn-login, .btn-logout, .btn-submit, .btn-approve {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.btn-login, .btn-logout, .btn-submit {
+    background-color: var(--secondary-color);
+    color: #fff;
+}
+
+.btn-login:hover, .btn-logout:hover, .btn-submit:hover {
+    background-color: var(--primary-color);
+}
+
+.btn-approve {
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: var(--accent-color);
+    color: #fff;
+    text-align: center;
+}
+
+.btn-approve:hover {
+    background-color: #218838;
+}
+
+/* =========================
+   Footer
+========================= */
+footer {
+    margin-top: auto;
+    text-align: center;
+    padding: 20px;
+    background-color: var(--primary-color);
+    color: #ddd;
+    font-size: 0.9rem;
+}
+
+/* =========================
+   Forms
+========================= */
+.form-container, .auth-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px var(--card-shadow);
+}
+
+.form-container h1, .auth-container h1 {
+    margin-bottom: 20px;
+    color: #111;
+}
+
+.form-container input, .auth-container input,
+.form-container select, .form-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-error {
+    color: red;
+    font-size: 0.9rem;
+}
+
+/* =========================
+   Politician Cards
+========================= */
+.page-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    width: 250px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px var(--card-shadow);
+    text-align: center;
+    background-color: #fff;
+    transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px var(--card-shadow-hover);
+}
+
+.card-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 15px;
+}
+
+.card-content h2 {
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+}
+
+.card-content p {
+    margin: 5px 0;
+    font-weight: 500;
+}
+
+.card-content p strong {
+    background-color: #e0f7fa;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #00796b;
+}
+
+.card-actions {
+    padding: 10px;
+    background-color: #f8f8f8;
+}
+
+/* =========================
+   Politician List & Details
+========================= */
+.politician-detail, .politician-list {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px var(--card-shadow);
+}
+
+.politician-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.politician-header h1 {
+    font-size: 2rem;
+    color: #111;
+}
+
+.politician-header span {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+.politician-header img {
+    max-width: 200px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.politician-info p {
+    margin: 8px 0;
+}
+
+/* =========================
+   Comments
+========================= */
+.comments-list {
+    list-style: none;
+    margin-top: 15px;
+    padding-left: 0;
+}
+
+.comments-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.comments-list li strong {
+    color: #333;
+}
+
+/* =========================
+   Responsive Design
+========================= */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 500px) {
+    .card {
+        width: 90%;
+    }
+
+    .card-image img {
+        height: 150px;
+    }
+}
