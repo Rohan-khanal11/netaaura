@@ -2,56 +2,80 @@
 {% load static %}
 
 {% block content %}
-<div class="politician-detail">
+<div class="politician-detail-wrapper">
+    
+    <!-- Left: Politician Details -->
+    <div class="politician-details">
+        <div class="politician-header">
+            <h1>{{ politician.name }} <span>({{ politician.party }})</span></h1>
+            <img src="{{ politician.image.url }}" alt="{{ politician.name }}">
+        </div>
 
-    <div class="politician-header">
-        <h1>{{ politician.name }} <span>({{ politician.party }})</span></h1>
-        <img src="{{ politician.image.url }}" alt="{{ politician.name }}">
+        <div class="politician-info">
+            <p><strong>Position:</strong> {{ politician.position }}</p>
+
+           <div class="pros-cons">
+    <table class="pros-cons-table">
+        <thead>
+            <tr>
+                <th>Pros</th>
+                <th>Cons</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ politician.pros|linebreaksbr }}</td>
+                <td>{{ politician.cons|linebreaksbr }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+            <!-- Aura Slider -->
+            <div class="aura-slider">
+                <form method="post" action="{% url 'rate_politician' politician.pk %}">
+                    {% csrf_token %}
+                    <label for="aura_score">Aura (-999 to +999):</label>
+                    <input type="range" id="aura_score" name="aura_score" min="-999" max="999" value="{{ politician.average_aura|default:0 }}">
+                    <button type="submit" class="btn-submit">Submit Aura</button>
+                </form>
+                <p><strong>Average Aura:</strong> {{ politician.average_aura|floatformat:1 }}</p>
+            </div>
+
+            <!-- Admin Actions -->
+            {% if user.is_staff %}
+            <div class="admin-actions">
+                <a href="{% url 'edit_politician' politician.pk %}" class="btn btn-warning">Edit Details</a>
+                <form method="post" action="{% url 'delete_politician' politician.pk %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete Politician</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
     </div>
 
-    <div class="politician-info">
-        <p><strong>Position:</strong> {{ politician.position }}</p>
-        <p><strong>Biography:</strong> {{ politician.biography }}</p>
-        <p><strong>Average Aura:</strong> {{ politician.average_aura|floatformat:1 }}</p>
-    </div>
-
-    <hr>
-
-    <div class="rating-section">
-        <h2>Submit Rating</h2>
-        <form method="post" action="{% url 'rate_politician' politician.pk %}">
-            {% csrf_token %}
-            {{ rating_form.as_p }}
-            <button type="submit" class="btn-submit">Submit Rating</button>
-        </form>
-        {% if user.is_staff %}
-    <a href="{% url 'delete_politician' politician.pk %}" class="btn btn-danger">
-        Delete Politician
-    </a>
-{% endif %}
-
-    </div>
-
-    <hr>
-
-    <div class="comment-section">
-        <h2>Comments</h2>
+    <!-- Right: Discussion/Comments -->
+    <div class="discussion-section">
+        <h2>Discussion</h2>
 
         <form method="post" action="">
             {% csrf_token %}
-    {{ comment_form.as_p }}
-            <button type="submit" name="comment_submit" class="btn-submit">Add Comment</button>
+            {{ comment_form.as_p }}
+            <button type="submit" name="comment_submit" class="btn-submit">Post Comment</button>
         </form>
 
-        <ul class="comments-list">
+        <div class="discussion-messages">
             {% for comment in comments %}
-             <p><strong>{{ comment.user.username }}</strong>: {{ comment.text }}</p>
-                <small>{{ comment.created_at }}</small>
-                {% empty %}
-             <p>No comments yet.</p>
-    {% endfor %}
-
-        </ul>
+                <div class="discussion-item">
+                    <p><strong>{{ comment.user.username }}</strong>: {{ comment.text }}</p>
+                    <small>{{ comment.created_at }}</small>
+                </div>
+            {% empty %}
+                <p>No discussions yet. Start one!</p>
+            {% endfor %}
+        </div>
     </div>
 
 </div>

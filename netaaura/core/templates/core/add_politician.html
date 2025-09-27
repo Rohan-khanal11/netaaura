@@ -2,23 +2,68 @@
 {% load static %}
 
 {% block content %}
-<div class="form-container">
-    <h1>Add New Politician</h1>
+<div class="politician-detail-wrapper">
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-
-        {% for field in form %}
-        <div class="form-group">
-            {{ field.label_tag }}
-            {{ field }}
-            {% if field.errors %}
-                <div class="form-error">{{ field.errors|striptags }}</div>
-            {% endif %}
+    <!-- Left: Form Fields -->
+    <div class="politician-details">
+        <div class="politician-header">
+            <h1>Add New Politician</h1>
         </div>
-        {% endfor %}
 
-        <button type="submit" class="btn-submit">Submit Politician</button>
-    </form>
+        <div class="politician-info">
+            <form method="post" enctype="multipart/form-data" class="politician-form">
+                {% csrf_token %}
+
+                <!-- Name, Party, Position, Image -->
+                {% for field in form %}
+                    {% if field.name not in "pros cons" %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="form-error">{{ field.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                <!-- Pros & Cons Table -->
+                <div class="pros-cons">
+                    <table class="pros-cons-table">
+                        <thead>
+                            <tr>
+                                <th>Pros</th>
+                                <th>Cons</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ form.pros }}</td>
+                                <td>{{ form.cons }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {% if form.pros.errors %}
+                        <div class="form-error">{{ form.pros.errors|striptags }}</div>
+                    {% endif %}
+                    {% if form.cons.errors %}
+                        <div class="form-error">{{ form.cons.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">Submit Politician</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Right: Placeholder / Discussion-like section -->
+    <div class="discussion-section">
+        <h2>Guidelines</h2>
+        <p>Fill in the politician details, including pros and cons. Admins can approve later.</p>
+    </div>
+
 </div>
 {% endblock %}

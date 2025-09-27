@@ -34,13 +34,27 @@ def politician_list(request):
 # ----------------------------
 # Politician detail + ratings + comments
 # ----------------------------
-def politician_detail(request, pk):
-    politician = get_object_or_404(Politician, pk=pk, is_approved=True)
-    ratings = politician.rating_set.all()
-    comments = Comment.objects.filter(rating__politician=politician)
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.db.models import Avg
+from .models import Politician, Comment
+from .forms import CommentForm, RatingForm
 
-    rating_form = RatingForm()
+def politician_detail(request, pk):
+    # Fetch approved politician
+    politician = get_object_or_404(Politician, pk=pk, is_approved=True)
+    
+    # Ratings and average aura
+    ratings = politician.rating_set.all()
+    avg = ratings.aggregate(Avg('aura_score'))['aura_score__avg']
+    politician.average_aura = round(avg, 1) if avg is not None else 0
+
+    # Comments
+    comments = politician.comments.all().order_by("-created_at")
+
+    # Forms
     comment_form = CommentForm()
+    rating_form = RatingForm()
 
     # Handle comment submission
     if request.method == "POST" and "comment_submit" in request.POST:
@@ -57,14 +71,13 @@ def politician_detail(request, pk):
             messages.error(request, "You must be logged in to comment.")
             return redirect("login")
 
-    context = {
+    return render(request, "core/politician_detail.html", {
         "politician": politician,
         "ratings": ratings,
         "comments": comments,
-        "rating_form": rating_form,
         "comment_form": comment_form,
-    }
-    return render(request, "core/politician_detail.html", context)
+        "rating_form": rating_form,
+    })
 
 
 # ----------------------------
@@ -152,3 +165,20 @@ def delete_politician(request, pk):
         messages.success(request, f"{politician.name} has been deleted!")
         return redirect("politician_list")
     return render(request, "core/confirm_delete.html", {"politician": politician})
+
+
+# ----------------------------
+# Admin: Edit politicians Details
+# ----------------------------
+@login_required
+def edit_politician(request, pk):
+    politician = get_object_or_404(Politician, pk=pk)
+    if request.method == "POST":
+        form = PoliticianForm(request.POST, request.FILES, instance=politician)
+        if form.is_valid():
+            form.save()
+            return redirect("politician_detail", pk=politician.pk)
+    else:
+        form = PoliticianForm(instance=politician)
+    return render(request, "core/edit_politician.html", {"form": form, "politician": politician})
+

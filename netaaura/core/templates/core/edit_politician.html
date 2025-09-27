@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="politician-detail-wrapper">
+
+    <!-- Left: Edit Form -->
+    <div class="politician-details">
+        <div class="politician-header">
+            <h1>Edit Politician: {{ politician.name }}</h1>
+        </div>
+
+        <div class="politician-info">
+            <form method="post" enctype="multipart/form-data" class="politician-form">
+                {% csrf_token %}
+
+                <!-- General fields -->
+                <div class="form-group">
+                    {{ form.name.label_tag }}
+                    {{ form.name }}
+                </div>
+                <div class="form-group">
+                    {{ form.party.label_tag }}
+                    {{ form.party }}
+                </div>
+                <div class="form-group">
+                    {{ form.position.label_tag }}
+                    {{ form.position }}
+                </div>
+                <div class="form-group">
+                    {{ form.image.label_tag }}
+                    {{ form.image }}
+                    {% if politician.image %}
+                        <p>Current Image:</p>
+                        <img src="{{ politician.image.url }}" alt="{{ politician.name }}" style="max-width:150px; border-radius:8px;">
+                    {% endif %}
+                </div>
+
+                <!-- Pros & Cons table -->
+                <div class="pros-cons">
+                    <table class="pros-cons-table">
+                        <thead>
+                            <tr>
+                                <th>Pros</th>
+                                <th>Cons</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ form.pros }}</td>
+                                <td>{{ form.cons }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Submit -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">Save Changes</button>
+                    <a href="{% url 'politician_detail' politician.pk %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Right: Preview -->
+    <div class="discussion-section">
+        <h2>Preview</h2>
+        <div class="preview-card">
+            {% if politician.image %}
+                <img src="{{ politician.image.url }}" alt="{{ politician.name }}" style="max-width:100%; border-radius:8px; margin-bottom:10px;">
+            {% endif %}
+            <p><strong>{{ politician.name }}</strong> ({{ politician.party }})</p>
+            <p><em>{{ politician.position }}</em></p>
+            <p><strong>Pros:</strong> {{ politician.pros|linebreaksbr }}</p>
+            <p><strong>Cons:</strong> {{ politician.cons|linebreaksbr }}</p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

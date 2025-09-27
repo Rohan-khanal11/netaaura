@@ -14,9 +14,9 @@ class PoliticianForm(forms.ModelForm):
 class RatingForm(forms.ModelForm):
     class Meta:
         model = Rating
-        fields = ["aura_score", "integrity", "effectiveness", "popularity", "comment"]
+        fields = ['aura_score']
         widgets = {
-            "comment": forms.Textarea(attrs={"rows": 3}),
+            'aura_score': forms.NumberInput(attrs={'type': 'range', 'min': -999, 'max': 999})
         }
 
 
@@ -25,5 +25,5 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ["text"]
         widgets = {
-            "text": forms.Textarea(attrs={"rows": 2, "placeholder": "Write your comment..."}),
+            "text": forms.Textarea(attrs={"rows": 3, "placeholder": "Write your comment..."})
         }

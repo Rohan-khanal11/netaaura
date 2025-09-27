@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils import timezone
+from django.conf import settings
+
 
 class Politician(models.Model):
     name = models.CharField(max_length=255)
@@ -42,17 +45,9 @@ class Rating(models.Model):
         self.politician.update_average_aura()
 
 
-class Comment(models.Model):
-    rating = models.ForeignKey(
-        Rating,
-        on_delete=models.CASCADE,
-        related_name="comments"  # <-- add this
-    )
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    text = models.TextField()
-    likes = models.PositiveIntegerField(default=0)
-    dislikes = models.PositiveIntegerField(default=0)
-    reported = models.BooleanField(default=False)
 
-    def __str__(self):
-        return f"Comment by {self.user.username} on {self.rating.politician.name}"
+class Comment(models.Model):
+    politician = models.ForeignKey(Politician, on_delete=models.CASCADE, related_name="comments")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)

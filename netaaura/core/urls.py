@@ -12,4 +12,5 @@ urlpatterns = [
     path("approve/", views.approve_politicians_view, name="approve_politicians"),
     path("approve/<int:pk>/", views.approve_politician_action, name="approve_politician"),
     path("politician/<int:pk>/delete/", views.delete_politician, name="delete_politician"),
+    path("politicians/<int:pk>/edit/", views.edit_politician, name="edit_politician"),
 ]
